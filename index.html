@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Commerce Systems — Exam Quiz (Expanded 260+ Qs)</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F6F2;
+  --surface:#FFFFFF;
+  --border:#E3E1D9;
+  --text:#1A1A18;
+  --muted:#6B6B66;
+  --hint:#A8A8A3;
+  --blue:#185FA5;--blue-light:#E6F1FB;--blue-dark:#0C447C;
+  --green:#3B6D11;--green-light:#EAF3DE;--green-dark:#27500A;
+  --red:#A32D2D;--red-light:#FCEBEB;--red-dark:#791F1F;
+  --amber:#854F0B;--amber-light:#FAEEDA;
+  --purple:#534AB7;--purple-light:#EEEDFE;--purple-dark:#3C3489;
+  --teal:#0F6E56;--teal-light:#E1F5EE;--teal-dark:#085041;
+  --coral:#993C1D;--coral-light:#FAECE7;
+  --pink:#993556;--pink-light:#FBEAF0;
+}
+html{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);min-height:100vh}
+body{min-height:100vh}
+
+/* Layout */
+.shell{max-width:780px;margin:0 auto;padding:2rem 1.25rem 4rem}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:12px}
+.logo{font-size:13px;font-weight:500;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;font-family:'DM Mono',monospace}
+.header-title{font-size:22px;font-weight:600;line-height:1.2}
+.header-sub{font-size:13px;color:var(--muted);margin-top:3px}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin-bottom:1.5rem}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;text-align:center}
+.stat .val{font-size:22px;font-weight:600;line-height:1}
+.stat .lbl{font-size:11px;color:var(--muted);margin-top:4px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.04em}
+
+/* Filter */
+.filter-wrap{margin-bottom:1.25rem}
+.filter-label{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.filter-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--muted);transition:all .15s}
+.chip:hover{border-color:#999;color:var(--text)}
+.chip.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+/* Progress */
+.progress-wrap{height:3px;background:var(--border);border-radius:3px;margin-bottom:1.5rem;overflow:hidden}
+.progress-bar{height:100%;background:var(--blue);border-radius:3px;transition:width .4s ease}
+
+/* Question card */
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1rem}
+.source-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;margin-bottom:12px;font-family:'DM Mono',monospace;letter-spacing:.01em;border:1px solid transparent}
+.q-num{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+.q-text{font-size:16px;font-weight:500;line-height:1.55;margin-bottom:1.25rem;color:var(--text)}
+.options{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--border);border-radius:9px;padding:11px 14px;cursor:pointer;background:transparent;text-align:left;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);line-height:1.5;transition:all .15s;width:100%}
+.opt:hover:not(:disabled){background:var(--bg);border-color:#BBBBBB}
+.opt-letter{font-weight:600;min-width:20px;color:var(--muted);font-family:'DM Mono',monospace;font-size:13px}
+.opt.correct{background:var(--green-light);border-color:#97C459;color:var(--green-dark)}
+.opt.correct .opt-letter{color:var(--green)}
+.opt.wrong{background:var(--red-light);border-color:#F09595;color:var(--red-dark)}
+.opt.wrong .opt-letter{color:var(--red)}
+.opt:disabled{cursor:default}
+
+/* Feedback */
+.feedback{margin-top:1rem;padding:10px 14px;border-radius:8px;font-size:13px;line-height:1.5;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:var(--green-light);color:var(--green-dark);border:1px solid #97C459}
+.feedback.err{background:var(--red-light);color:var(--red-dark);border:1px solid #F09595}
+
+/* Nav */
+.nav-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.nav-info{font-size:13px;color:var(--muted);font-family:'DM Mono',monospace}
+.btn-row{display:flex;gap:8px}
+.btn{padding:9px 20px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);font-weight:500;transition:all .15s}
+.btn:hover:not(:disabled){background:var(--bg);border-color:#BBBBBB}
+.btn:disabled{opacity:.35;cursor:default}
+.btn-primary{background:var(--text);color:var(--bg);border-color:var(--text)}
+.btn-primary:hover:not(:disabled){background:#333;border-color:#333}
+
+/* Results */
+.results-hero{text-align:center;padding:2rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:1.5rem}
+.results-hero h2{font-size:13px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.75rem}
+.score-num{font-size:56px;font-weight:600;line-height:1;margin-bottom:4px}
+.score-pct{font-size:14px;color:var(--muted);margin-bottom:12px}
+.grade-pill{display:inline-block;padding:5px 18px;border-radius:20px;font-size:13px;font-weight:600;letter-spacing:.02em}
+.source-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-bottom:1.5rem}
+.src-row{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
+.src-row .src-name{font-size:12px;font-weight:500;color:var(--text)}
+.src-row .src-score{font-size:13px;font-family:'DM Mono',monospace;font-weight:500}
+.review-section h3{font-size:13px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:1rem}
+.review-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:10px}
+.review-q{font-size:14px;font-weight:500;line-height:1.5;margin:8px 0 10px;color:var(--text)}
+.review-ans{display:flex;flex-direction:column;gap:5px}
+.ra{padding:5px 12px;border-radius:6px;font-size:12px;line-height:1.4}
+.ra.wrong{background:var(--red-light);color:var(--red-dark)}
+.ra.correct{background:var(--green-light);color:var(--green-dark)}
+.restart-btn{display:block;margin:2rem auto 0;padding:11px 32px;border-radius:8px;border:1px solid var(--border);background:var(--text);color:var(--bg);cursor:pointer;font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500}
+.restart-btn:hover{background:#333}
+.no-wrong{text-align:center;padding:2rem;color:var(--muted);font-size:14px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.icon{width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:3px}
+
+.footer{text-align:center;margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:13px;color:var(--hint);font-family:'DM Mono',monospace}
+.footer span{color:#E24B4A}
+@media(max-width:520px){
+  .shell{padding:1rem .85rem 3rem}
+  .header-title{font-size:18px}
+  .q-text{font-size:15px}
+  .score-num{font-size:42px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div>
+      <div class="logo">IGSR · Alexandria University</div>
+      <div class="header-title">E-Commerce Systems 2</div>
+      <div class="header-sub">1404707 — Full Exam Quiz · 260+ Questions (incl. Lectures 1–6)</div>
+    </div>
+  </header>
+  <div id="root"></div>
+  <footer class="footer">Developed with <span>♥</span> by : Mina Hawarei</footer>
+</div>
+
+<script>
+// --------------------------------------------------------------
+// EXISTING SOURCE COLORS + EXTENDED FOR LECTURE SOURCES
+const SOURCE_COLORS = {
+  "E-Commerce Security":      {bg:"#EEEDFE",color:"#3C3489",border:"#AFA9EC"},
+  "E-Commerce vs E-Business": {bg:"#E1F5EE",color:"#085041",border:"#5DCAA5"},
+  "E-Voting Systems":         {bg:"#FAEEDA",color:"#633806",border:"#EF9F27"},
+  "Supply Chain":             {bg:"#FAECE7",color:"#712B13",border:"#F0997B"},
+  "CRM":                      {bg:"#FBEAF0",color:"#72243E",border:"#ED93B1"},
+  "E-Banking":                {bg:"#E6F1FB",color:"#0C447C",border:"#85B7EB"},
+  "Lecture 1: Introduction to E-Commerce": {bg:"#E6F1FB",color:"#0C447C",border:"#85B7EB"},
+  "Lecture 2: E-Commerce Categories & EDI": {bg:"#EEEDFE",color:"#3C3489",border:"#AFA9EC"},
+  "Lecture 3: E-Marketing":                {bg:"#FAEEDA",color:"#633806",border:"#EF9F27"},
+  "Lecture 4: E-Government":               {bg:"#E1F5EE",color:"#085041",border:"#5DCAA5"},
+  "Lecture 5: E-Payment & Security":       {bg:"#FBEAF0",color:"#72243E",border:"#ED93B1"},
+  "Lecture 6: M-Commerce & E-Voting":      {bg:"#FAECE7",color:"#712B13",border:"#F0997B"}
+};
+
+// --------------------------------------------------------------
+// ORIGINAL QUESTION BANK (120 items)
+const ORIGINAL_RAW = [
+  {q:"What does E-commerce primarily involve?",o:["Selling products in physical stores","Buying and selling goods/services online","Only business-to-business transactions","Only customer reviews"],a:1,s:"E-Commerce Security"},
+  {q:"Which type of e-commerce is when a company sells directly to a customer?",o:["B2B","B2C","C2C","P2P"],a:1,s:"E-Commerce Security"},
+  {q:"Why is e-commerce security important?",o:["To make websites faster","To protect customer data and prevent fraud","To reduce product costs","To improve product design"],a:1,s:"E-Commerce Security"},
+  {q:"Which of the following is a common cyber threat in e-commerce?",o:["Phishing","Customer loyalty points","Seasonal discounts","Product reviews"],a:0,s:"E-Commerce Security"},
+  {q:"What is a real-world example of a phishing attack?",o:["An email asking a customer to verify their login details on a fake website","Slow website loading","A product delivery delay","An online survey"],a:0,s:"E-Commerce Security"},
+  {q:"Malware in e-commerce can:",o:["Steal customer payment details","Improve website speed","Track shipping","Display product reviews"],a:0,s:"E-Commerce Security"},
+  {q:"What is SQL Injection (SQLi)?",o:["A type of encryption","A code attack on databases","A network slowdown","A marketing strategy"],a:1,s:"E-Commerce Security"},
+  {q:"Distributed Denial of Service (DDoS) attacks target:",o:["Customers directly","Website/server availability","Product descriptions","Payment gateways"],a:1,s:"E-Commerce Security"},
+  {q:"What does MITM (Man-in-the-Middle) attack do?",o:["Steals or alters data in communication","Speeds up transactions","Improves website layout","Blocks malware"],a:0,s:"E-Commerce Security"},
+  {q:"Which technique protects against unauthorized login attempts?",o:["SSL/TLS encryption","Multi-Factor Authentication (MFA)","Web design","Marketing campaigns"],a:1,s:"E-Commerce Security"},
+  {q:"Role-Based Access Control (RBAC) ensures:",o:["Everyone has full access","Only authorized users access sensitive areas","Faster website traffic","Lower server costs"],a:1,s:"E-Commerce Security"},
+  {q:"Which layer of the proposed model encrypts customer data?",o:["User Layer","Database Layer","Authentication Layer","Security Layer"],a:1,s:"E-Commerce Security"},
+  {q:"How does a Web Application Firewall (WAF) help e-commerce security?",o:["Improves shipping speed","Blocks common web attacks like SQL Injection","Encrypts customer data","Tracks customer reviews"],a:1,s:"E-Commerce Security"},
+  {q:"How does AI-based fraud detection improve security?",o:["Automatically flags abnormal user behavior","Increases website speed","Reduces server storage","Adds more products to cart"],a:0,s:"E-Commerce Security"},
+  {q:"What is a key benefit of using SSL/TLS encryption?",o:["Prevents MITM attacks","Stops malware on customer devices","Increases server storage","Reduces delivery time"],a:0,s:"E-Commerce Security"},
+  {q:"Which part of the project explains why e-commerce platforms are high-value targets?",o:["Part 1 – Introduction","Part 3 – Security Techniques","Part 4 – Proposed Model","Part 5 – Findings"],a:0,s:"E-Commerce Security"},
+  {q:"Which part of the project evaluates the effectiveness of the proposed security model?",o:["Part 2 – Threats","Part 3 – Security Techniques","Part 4 – Proposed Model","Part 5 – Findings & Results"],a:3,s:"E-Commerce Security"},
+  {q:"Which of the following demonstrates the success of the security model?",o:["Increased product prices","Sensitive data stays encrypted, fraud prevented, uptime maintained","Faster customer registration","More product reviews"],a:1,s:"E-Commerce Security"},
+  {q:"What is a key lesson from the e-commerce security project?",o:["Single security measures are enough","Layered, holistic security is most effective","Only encryption matters","E-commerce doesn't need cybersecurity"],a:1,s:"E-Commerce Security"},
+  {q:"How does the e-commerce security project connect all parts together?",o:["Shows threats → applies techniques → builds a model → demonstrates results","Lists threats only","Describes e-commerce history","Shows marketing strategies"],a:0,s:"E-Commerce Security"},
+
+  {q:"What is e-commerce mainly about?",o:["Managing employees","Buying and selling online","Accounting","Manufacturing"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"E-business includes:",o:["Only online sales","Only marketing","All digital business operations","Only payments"],a:2,s:"E-Commerce vs E-Business"},
+  {q:"Which one is part of e-commerce?",o:["HR system","Order tracking","Payroll","Recruitment"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"E-business focuses on:",o:["Only customers","Only sales","Efficiency and operations","Only ads"],a:2,s:"E-Commerce vs E-Business"},
+  {q:"Which tool is used in e-commerce?",o:["ERP","CRM","Payment gateway","HRM"],a:2,s:"E-Commerce vs E-Business"},
+  {q:"Which system is part of e-business?",o:["Shopping cart","ERP","Checkout page","Product page"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"E-commerce goal is:",o:["Reduce employees","Generate sales","Manage HR","Improve hiring"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"E-business goal is:",o:["Sell products only","Improve efficiency","Only marketing","Only delivery"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"B2C means:",o:["Business to Company","Business to Customer","Customer to Business","Customer to Customer"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"C2C example is:",o:["Amazon","eBay","SAP","Oracle"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"Which is a payment example?",o:["SAP","Stripe","Oracle","HRM"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"CRM is used for:",o:["Managing inventory","Customer relationships","Payments","Delivery"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"SCM is related to:",o:["Customers","Supply chain","Marketing","Ads"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"One benefit of e-commerce:",o:["Slow service","Global reach","More paperwork","Manual work"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"One benefit of e-business:",o:["More errors","Automation","Less data","Slower work"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"Cybersecurity risk belongs to:",o:["E-business","E-commerce","HR","Finance"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"ERP helps in:",o:["Playing games","Managing operations","Writing emails","Ads only"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"Freemium model means:",o:["All paid","Free + paid features","Only ads","Only subscription"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"E-commerce is like:",o:["Warehouse","Digital storefront","HR office","Factory"],a:1,s:"E-Commerce vs E-Business"},
+  {q:"E-business is:",o:["Only website","Full digital system","Only payments","Only ads"],a:1,s:"E-Commerce vs E-Business"},
+
+  {q:"What is the main purpose of Electronic Voting (E-Voting)?",o:["To replace elections with surveys","To cast, record, and count votes electronically","To allow unlimited voting per person","To eliminate all human involvement in elections"],a:1,s:"E-Voting Systems"},
+  {q:"Which of the following is a key advantage of E-Voting over traditional paper-based voting?",o:["Higher chance of vote tampering","Faster vote counting","Limited accessibility","Increased manual errors"],a:1,s:"E-Voting Systems"},
+  {q:"Which component is essential for an E-Voting system?",o:["Ballot printing machines","Electronic voting machines or digital interfaces","Physical ballot boxes only","Human-only counting teams"],a:1,s:"E-Voting Systems"},
+  {q:"One major challenge of traditional voting systems that E-Voting addresses is:",o:["Over-reliance on technology","Long queues and delayed results","Too many automated checks","Unlimited remote access"],a:1,s:"E-Voting Systems"},
+  {q:"Which best describes the primary difference between Polling-Place E-Voting and Remote E-Voting?",o:["The type of candidate being elected","Whether the vote is counted by a human or a machine","The physical location where the vote is cast and the level of official supervision","The total cost required to run the election"],a:2,s:"E-Voting Systems"},
+  {q:"A voter marks a physical paper ballot which is then read by an electronic machine. Which system is being used?",o:["Direct Recording Electronic (DRE)","Optical Scan Voting","Mobile Voting","Internet Voting"],a:1,s:"E-Voting Systems"},
+  {q:"What is a primary disadvantage shared by both Internet and Mobile voting?",o:["It requires a physical presence at a polling station","It has higher infrastructure costs for the voting center","It involves security risks such as hacking, cyberattacks, and privacy concerns","It is less convenient for voters in remote locations"],a:2,s:"E-Voting Systems"},
+  {q:"Which system records the vote directly into the machine's memory without necessarily printing a ballot first?",o:["Electronic Ballot Printers","Optical Scan Voting","Direct Recording Electronic (DRE)","Traditional Paper Ballots"],a:2,s:"E-Voting Systems"},
+  {q:"What is the purpose of the Public Key in the e-voting system?",o:["To decrypt votes after counting","To encrypt votes in the voting application","To authenticate voters using OTP","To generate the Private Key"],a:1,s:"E-Voting Systems"},
+  {q:"Where is the Private Key stored to ensure maximum security?",o:["On a regular computer server","In the voter's mobile phone","In a Hardware Security Module (HSM)","On the Election Committee's USB drive"],a:2,s:"E-Voting Systems"},
+  {q:"After E-Voting ends, the system sorts and validates votes. What is the purpose of this step?",o:["To count how many people voted","To remove duplicate votes and votes from ineligible voters","To send reminders to voters who haven't voted yet","To print the results for newspapers"],a:1,s:"E-Voting Systems"},
+  {q:"What is used to verify the voter's identity during login?",o:["Password only","OTP (One Time Password)","Candidate ID","Database key"],a:1,s:"E-Voting Systems"},
+  {q:"Why is the lack of a 'Physical Audit Trail' considered a disadvantage?",o:["It prevents voters from taking their ballot home as a souvenir","Because paper is more environmentally friendly","It makes the voting process too fast for people to understand","It prevents a 100% verifiable manual recount in case of disputes"],a:3,s:"E-Voting Systems"},
+  {q:"What is the main security risk associated with 'Centralized Trust' in the voting servers?",o:["A single point of failure where an insider could manipulate results","Voters might forget the URL of the server","The servers might run out of storage space","The servers are too expensive to maintain"],a:0,s:"E-Voting Systems"},
+  {q:"Why does Estonia continue using I-Voting despite researchers' advice to stop?",o:["They want to make sure no elderly people can vote","Deep societal trust in 'e-Estonia' and continuous system updates","They are forced by the United Nations to use it","They lost the keys to the physical voting centers"],a:1,s:"E-Voting Systems"},
+  {q:"What is a significant advantage of I-Voting for the Estonian government?",o:["Increased hardware sales for local PCs","The ability to track exactly who voted for which party","Charging a fee for every vote cast","Reduced logistical and administrative costs"],a:3,s:"E-Voting Systems"},
+  {q:"What is the purpose of encryption in E-Voting?",o:["Faster vote counting","Only eligible voters can vote","Votes are deleted automatically","Results appear immediately"],a:1,s:"E-Voting Systems"},
+  {q:"What does authentication ensure in an E-Voting system?",o:["Faster vote counting","Only eligible voters can vote","Votes are deleted automatically","Results appear immediately"],a:1,s:"E-Voting Systems"},
+  {q:"What technology may improve transparency in future E-Voting systems?",o:["Artificial Intelligence","Blockchain","Cloud Storage","Email Systems"],a:1,s:"E-Voting Systems"},
+  {q:"One advantage of E-Voting in the future is:",o:["Slower election results","More complicated voting","Faster results and higher participation","Manual vote counting"],a:2,s:"E-Voting Systems"},
+
+  {q:"What is Supply Chain Management (SCM)?",o:["Managing only transportation","Managing the flow of goods, information, and finances","Managing employees in a company","Managing marketing strategies"],a:1,s:"Supply Chain"},
+  {q:"Which of the following is NOT a component of a supply chain?",o:["Suppliers","Manufacturers","Customers","Competitors"],a:3,s:"Supply Chain"},
+  {q:"The primary goal of supply chain management is to:",o:["Maximize production cost","Increase inventory levels","Deliver value to customers efficiently","Reduce communication between partners"],a:2,s:"Supply Chain"},
+  {q:"Who is responsible for converting raw materials into finished products?",o:["Supplier","Distributor","Manufacturer","Retailer"],a:2,s:"Supply Chain"},
+  {q:"What is the main goal of a supply chain strategy?",o:["Increase product price","Move products efficiently from supplier to customer","Reduce customer orders","Focus only on marketing"],a:1,s:"Supply Chain"},
+  {q:"Agile strategy is best for which type of products?",o:["Stable products","Seasonal or trendy products","Expensive products only","Digital products only"],a:1,s:"Supply Chain"},
+  {q:"What is the most expensive part of delivery?",o:["Packaging","Warehousing","Last-mile delivery","Manufacturing"],a:2,s:"Supply Chain"},
+  {q:"What is the main goal of demand forecasting using data science?",o:["Increase delivery time","Predict future demand","Reduce number of customers","Eliminate inventory"],a:1,s:"Supply Chain"},
+  {q:"Data science helps inventory management by:",o:["Ignoring demand patterns","Increasing stock randomly","Analyzing data to maintain optimal stock levels","Stopping warehouse operations"],a:2,s:"Supply Chain"},
+  {q:"In logistics, data science is mainly used to:",o:["Increase fuel consumption","Choose inefficient routes","Optimize delivery routes","Stop transportation"],a:2,s:"Supply Chain"},
+  {q:"What is one benefit of using data science in supply chain decisions?",o:["Slower decision-making","Random decisions","Data-driven decision making","Ignoring risks"],a:2,s:"Supply Chain"},
+  {q:"What is one operational benefit of supply chain management?",o:["Increased confusion","Improved efficiency","Higher delays","Reduced communication"],a:1,s:"Supply Chain"},
+  {q:"How does supply chain management help reduce costs?",o:["By increasing waste","By ignoring transportation","By optimizing sourcing and logistics","By producing more than needed"],a:2,s:"Supply Chain"},
+  {q:"Why is inventory management important in supply chains?",o:["To increase shortages","To avoid storing products","To prevent shortages and overstocking","To delay delivery"],a:2,s:"Supply Chain"},
+  {q:"What is the main purpose of Supply Chain Management (SCM)?",o:["To increase product prices","To coordinate the flow of products, information, and finances from suppliers to customers","To focus only on manufacturing activities","To eliminate the need for suppliers"],a:1,s:"Supply Chain"},
+  {q:"Which of the following is considered a key process integrated in Supply Chain Management?",o:["Procurement","Advertising","Market research only","Customer entertainment"],a:0,s:"Supply Chain"},
+  {q:"In modern e-commerce environments, supply chain managers use digital technologies mainly to:",o:["Increase employee salaries","Monitor inventory, track shipments, and forecast demand","Replace suppliers completely","Reduce communication between partners"],a:1,s:"Supply Chain"},
+  {q:"What is a challenge in demand forecasting in e-commerce?",o:["Stable demand","Easy predictions","Uncertain customer demand","No demand changes"],a:2,s:"Supply Chain"},
+  {q:"Why is inventory management complex in e-commerce?",o:["Only one warehouse","Multiple warehouses and locations","No products","Fixed demand"],a:1,s:"Supply Chain"},
+  {q:"What does 'last-mile delivery' refer to?",o:["Shipping between countries","Delivery to warehouses","Final delivery to the customer","Product manufacturing"],a:2,s:"Supply Chain"},
+
+  {q:"What does CRM stand for?",o:["Customer Relationship Management","Customer Retail Method","Client Revenue Model","Consumer Resource Management"],a:0,s:"CRM"},
+  {q:"What is the main goal of CRM in e-commerce?",o:["Increase customer satisfaction and loyalty","Reduce internet speed","Eliminate customer support","Replace websites"],a:0,s:"CRM"},
+  {q:"Which CRM type focuses on data analysis?",o:["Operational CRM","Analytical CRM","Collaborative CRM","Strategic CRM"],a:1,s:"CRM"},
+  {q:"Which of the following is an example of customer behavioral data?",o:["Age","Gender","Pages visited","Location"],a:2,s:"CRM"},
+  {q:"Why is customer segmentation important?",o:["To treat all customers equally","To target customers effectively","To remove customers","To increase website size"],a:1,s:"CRM"},
+  {q:"Which of the following is a personalization technique?",o:["Product recommendations","Deleting customer accounts","Blocking users","Manual accounting"],a:0,s:"CRM"},
+  {q:"What does SEO stand for?",o:["Search Engine Optimization","System Engine Output","Search Email Operator","Software Engine Optimization"],a:0,s:"CRM"},
+  {q:"Which CRM component helps solve customer problems quickly?",o:["Customer support","Segmentation","Advertising","Data deletion"],a:0,s:"CRM"},
+  {q:"Which of the following is part of loyalty programs?",o:["Random pricing","Points and rewards","Removing discounts","Ignoring repeat customers"],a:1,s:"CRM"},
+  {q:"Which communication method is commonly used in CRM support?",o:["Live chat","Smoke signals","Fax only","Postal pigeons"],a:0,s:"CRM"},
+  {q:"What kind of emails are sent in personalized marketing?",o:["Generic spam emails","Customized emails","Empty emails","No emails"],a:1,s:"CRM"},
+  {q:"What is customer retention?",o:["Losing customers","Keeping customers loyal","Increasing shipping cost","Removing support"],a:1,s:"CRM"},
+  {q:"Which platform commonly uses CRM systems?",o:["E-commerce websites","Televisions","Microwaves","Printers"],a:0,s:"CRM"},
+  {q:"What is collected during customer data collection?",o:["Purchase history","House keys","TV channels","Car parts"],a:0,s:"CRM"},
+  {q:"Which stage comes first in the CRM lifecycle?",o:["Retain customers","Enhance relationship","Acquire customers","Delete data"],a:2,s:"CRM"},
+  {q:"What do chatbots provide?",o:["24/7 automated support","Physical delivery","Database removal","Hardware repair"],a:0,s:"CRM"},
+  {q:"Which customers are usually targeted with VIP offers?",o:["Inactive users","High-value customers","Children","Suppliers"],a:1,s:"CRM"},
+  {q:"What does CRM help businesses understand?",o:["Customer behavior","Planet movements","Weather only","Road construction"],a:0,s:"CRM"},
+  {q:"Which of the following improves customer loyalty?",o:["Poor service","Slow responses","Loyalty rewards","Ignoring feedback"],a:2,s:"CRM"},
+  {q:"Why is personalization effective?",o:["It increases customer engagement","It removes products","It reduces website quality","It stops purchases"],a:0,s:"CRM"},
+
+  {q:"What is Internet Banking?",o:["Banking through a website","Only via phone","Only at the branch","Through ATMs"],a:0,s:"E-Banking"},
+  {q:"Which of the following is an E-Banking channel?",o:["Branches only","Mobile Apps","Printers","Employees"],a:1,s:"E-Banking"},
+  {q:"Which is an example of EFT (Electronic Funds Transfer)?",o:["Cash withdrawal","Inter-bank transfers","Paper statement request","Cash payment at branch"],a:1,s:"E-Banking"},
+  {q:"Which is an advantage of E-Banking?",o:["High cost","Limited hours","24/7 availability","Requires physical presence"],a:2,s:"E-Banking"},
+  {q:"Which is a disadvantage of E-Banking?",o:["Fast transactions","Cybersecurity risks","Lower cost","Instant notifications"],a:1,s:"E-Banking"},
+  {q:"Which layer contains mobile and web applications?",o:["Back-end","Front-end","Data tier","External integration layer"],a:1,s:"E-Banking"},
+  {q:"Which banking model is fully digital?",o:["Traditional bank","Hybrid bank","Digital-only bank","Branch-based bank"],a:2,s:"E-Banking"},
+  {q:"Which is a knowledge factor in authentication?",o:["Something you know","Something you give","Something you hand over","Something you consume"],a:0,s:"E-Banking"},
+  {q:"What is the role of a Firewall?",o:["Speed up internet","Block unauthorized access","Increase storage","Manage passwords"],a:1,s:"E-Banking"},
+  {q:"Which is an example of malware?",o:["Keylogger","Word app","Secure browser","VPN"],a:0,s:"E-Banking"},
+  {q:"What is MFA (Multi-Factor Authentication)?",o:["Single password login","Using multiple authentication factors","No verification","Removing passwords"],a:1,s:"E-Banking"},
+  {q:"Which is a cyber threat in E-Banking?",o:["Balance alert","Phishing","App update","PIN change"],a:1,s:"E-Banking"},
+  {q:"What is the purpose of encryption in E-Banking?",o:["Speed up systems","Protect data during transmission","Increase file size","Disable services"],a:1,s:"E-Banking"},
+  {q:"What is an advantage of telephone banking?",o:["Requires branch visit","Can be used anywhere","Requires physical presence","Limited hours"],a:1,s:"E-Banking"},
+  {q:"Which is an ATM service?",o:["Open new account","Cash withdrawal","Update personal data","Change phone number"],a:1,s:"E-Banking"},
+  {q:"Which is used in biometric authentication?",o:["Password","Fingerprint","SMS code","Smart card"],a:1,s:"E-Banking"},
+  {q:"Which banking model uses both branches and digital services?",o:["Brick-and-Click","Neobank","Direct Bank","Fintech"],a:0,s:"E-Banking"},
+  {q:"Which is a benefit of cloud computing in E-Banking?",o:["Slow performance","Easy scalability","Removes encryption","Disables services"],a:1,s:"E-Banking"},
+  {q:"What is a benefit of API Integration in E-Banking?",o:["Weak connections","Third-party service integration","Reduced security","No data sharing"],a:1,s:"E-Banking"},
+  {q:"Which is a future banking technology?",o:["Paper-only systems","Artificial Intelligence","Manual processing","Stopping transfers"],a:1,s:"E-Banking"}
+];
+
+// ------------------- NEW LECTURE QUESTIONS (from TXT) -----------------
+function parseLectureQuestions() {
+  const lectures = [
+    { name: "Lecture 1: Introduction to E-Commerce", items: [
+      {q:"What is the traditional definition of Commerce?",o:["The automation of internal organizational processes","The exchange of goods and services requiring transportation from producer to consumer","The use of digital networks for marketing","Providing services to employees"],a:1},
+      {q:"E-commerce provides the capability of buying and selling products and information through:",o:["Physical stores only","Paper-based catalogs","The Internet and online services","Traditional mail"],a:2},
+      {q:"Which of the following is considered a broader concept?",o:["E-Commerce","E-Marketing","E-Business","E-Payment"],a:2},
+      {q:"E-business includes e-commerce in addition to:",o:["Shipping physical goods","Internal processes like production, inventory management, and HR","Opening new physical branches","Manual auditing"],a:1},
+      {q:"What business model is used when a company sells products directly to the final consumer online?",o:["B2B","B2C","C2C","G2C"],a:1},
+      {q:"Amazon.com is considered a prime example of which e-commerce model?",o:["C2C","B2B","B2C","B2E"],a:2},
+      {q:"A transaction where an individual sells a used car to another individual via OLX is classified as:",o:["B2C","B2B","C2C","G2C"],a:2},
+      {q:"Which model delivers services, information, or products from an organization directly to its individual employees?",o:["B2C","B2B","B2E","C2C"],a:2},
+      {q:"When a government provides an online portal for citizens to renew licenses, it is using the _____ model.",o:["G2B","G2C","G2G","B2G"],a:1},
+      {q:"What is an advantage of E-Commerce for businesses?",o:["High operational costs","Need for physical company set-ups","Low operational costs and geographic reach","Restricted working hours"],a:2},
+      {q:"From a customer's perspective, what is a major benefit of e-commerce?",o:["Inability to examine products personally","Buying and selling 24 hours a day","Waiting in long lines","Limited choices of providers"],a:1},
+      {q:"Which of the following is a disadvantage of E-Commerce?",o:["Reduced transaction costs","Customers can easily select products","Possibility of credit card number theft","Faster buying procedures"],a:2},
+      {q:"\"Not everyone is connected to the Internet.\" This statement represents a:",o:["Benefit of traditional commerce","Disadvantage of E-Commerce","Feature of B2E","Goal of E-government"],a:1},
+      {q:"Mechanical failures in E-commerce can cause:",o:["Faster delivery times","Unpredictable effects on the total processes","Better customer satisfaction","Increased physical store visits"],a:1},
+      {q:"M-Commerce is defined as buying and selling goods and services through:",o:["Desktop computers","Wireless devices like cell phones and PDAs","Traditional bank branches","Paper catalogs"],a:1},
+      {q:"Which topic is NOT typically a core component of an E-Commerce curriculum?",o:["Supply chain management","E-commerce Security","Traditional Agriculture","E-payment"],a:2},
+      {q:"In the e-commerce purchasing cycle, what happens after the user adds items to the shopping cart?",o:["The item is shipped instantly","The user provides payment information and checkout","The website goes offline","The manufacturer starts production"],a:1},
+      {q:"E-commerce removes which traditional limitation?",o:["Internet connectivity requirement","Security risks","Theoretical geographic limitations","Shipping costs"],a:2},
+      {q:"Which model represents transactions between two businesses?",o:["B2C","C2C","B2B","G2C"],a:2},
+      {q:"E-commerce platforms allow customers to do what easily without moving physically?",o:["Try on clothes physically","Select and compare products from different providers","Pay with physical cash","Meet the business owner"],a:1}
+    ]},
+    { name: "Lecture 2: E-Commerce Categories & EDI", items: [
+      {q:"Which of the following is an E-Commerce category?",o:["Electronic Markets","Internet Commerce","Electronic Data Interchange (EDI)","All of the above"],a:3},
+      {q:"An environment that presents a range of offerings so purchasers can compare prices and make decisions is called:",o:["Electronic Markets","B2E","Supply Chain","CRM"],a:0},
+      {q:"An Airline Booking System is a classic example of:",o:["E-Voting","Electronic Markets","G2C","Traditional banking"],a:1},
+      {q:"What does EDI stand for?",o:["Electronic Device Internet","Electronic Data Interchange","External Data Interface","Electronic Digital Integration"],a:1},
+      {q:"EDI is the exchange of business transactions in a:",o:["Hand-written format","Computer-understandable standardized format","Physical package","Verbal agreement"],a:1},
+      {q:"In EDI, the two different organizations exchanging documents are referred to as:",o:["Competitors","Business partners or trading partners","Consumers","External agencies"],a:1},
+      {q:"A traditional document exchange of a purchase order normally takes:",o:["A few seconds","Less than an hour","Between three and five days","One month"],a:2},
+      {q:"Which of the following is a drawback of traditional paper or email communication?",o:["Extremely fast processing","Susceptible to manual data entry errors","Requires complex EDI software","Zero shipping time"],a:1},
+      {q:"An automated EDI document exchange process can take:",o:["Less than an hour","3 to 5 days","Several weeks","Exactly 24 hours"],a:0},
+      {q:"What triggers the auto-generation of an EDI purchase order in a buyer's system?",o:["A phone call from the supplier","Inventory reaching a pre-specified level","A customer complaint","A manual physical inventory count"],a:1},
+      {q:"Which of the following is an application of EDI?",o:["Financial reporting","Invoices","Purchasing and Scheduling","All of the above"],a:3},
+      {q:"Which of the following is NOT a main component of EDI?",o:["Application service","Translation service","Communication service","Social media service"],a:3},
+      {q:"What is the role of the Translation service in EDI?",o:["Collecting information from the user","Converting internal data format into the EDI standard format","Connecting to the internet physically","Delivering physical goods"],a:1},
+      {q:"The communication service in EDI often uses a secure network called:",o:["VPN (Virtual Private Network)","VAN (Value Added Network)","LAN (Local Area Network)","WWW"],a:1},
+      {q:"What is a major benefit of using EDI?",o:["Increased paperwork","Speed and Improved Accuracy","Slower processing times","Higher error margin"],a:1},
+      {q:"How does the Internet benefit corporate marketing?",o:["It increases communication costs","It allows for low-cost marketing with interactive, easily updated brochures","It requires high printing costs","It limits the audience to local areas"],a:1},
+      {q:"Which of the following is an advantage of email in internet commerce?",o:["It is slow","It carries no viruses","It is free and allows attaching original messages","It replaces official physical documents perfectly"],a:2},
+      {q:"What is a common disadvantage of using email for business?",o:["It cannot contain pictures","Receiving spam mails and potential viruses","It is too formal","It costs money per message"],a:1},
+      {q:"E-commerce on the internet improves customer service because:",o:["The internet sleeps at night","It forces customers to call during business hours","Information and services are available 24/7","It requires manual intervention for every query"],a:2},
+      {q:"Lower communication costs on the internet are achieved by:",o:["Making web pages that answer frequently asked questions immediately","Hiring more call center agents","Sending physical letters","Using premium-rate telephone numbers"],a:0}
+    ]},
+    { name: "Lecture 3: E-Marketing", items: [
+      {q:"E-Marketing is also known as:",o:["Web marketing","Online Marketing","Internet marketing","All of the above"],a:3},
+      {q:"E-Marketing uses which of the following to accomplish marketing objectives?",o:["Billboards","Electronic communication technologies (Internet, mobile phones)","Printed newspapers","Radio broadcasts"],a:1},
+      {q:"Traditional marketing relies heavily on:",o:["SEO and Emails","Offline marketing like print, TV, and radio","Social media algorithms","Paid online search ads"],a:1},
+      {q:"Which marketing type is generally more expensive?",o:["E-Marketing","Traditional Marketing","Email Marketing","Social Media Marketing"],a:1},
+      {q:"What is a significant advantage of E-Marketing?",o:["Limited geographic reach","High cost of entry","Increased interactivity and 24/7 availability","Slower service"],a:2},
+      {q:"Social media provides which of the following for businesses?",o:["Free advertising and promotion opportunities","Mandatory high-cost campaigns","Less interactivity with customers","Slower response times"],a:0},
+      {q:"Which method is considered one of the oldest forms of e-marketing?",o:["SEO","TikTok influencers","E-mail Marketing","Virtual Reality ads"],a:2},
+      {q:"A key benefit of E-mail Marketing is:",o:["High cost","Targeting the correct category and high ROI","Difficult to use","Avoids spam filters entirely"],a:1},
+      {q:"What does SEO stand for?",o:["Search Engine Optimization","Social Engagement Online","Sales Entity Operations","Secure Electronic Ordering"],a:0},
+      {q:"The main goal of SEO is to:",o:["Send emails to a database","Increase the appearance of a website in the first, unpaid results of search engines","Pay for top placement on Google","Design physical brochures"],a:1},
+      {q:"SEO relies primarily on targeting specific:",o:["Customer addresses","Keywords","Credit card numbers","Print media channels"],a:1},
+      {q:"A major disadvantage of SEO is:",o:["It is completely free overnight","It requires a long-term investment and faces fierce competition","It blocks users from visiting your site","It deletes your website's content"],a:1},
+      {q:"Paid Advertising in search engines usually appears:",o:["At the very bottom of page 10","Beside or above the organic search results","In the user's physical mailbox","Inside printed magazines"],a:1},
+      {q:"Which of the following is a disadvantage of Paid Advertising?",o:["It is very cheap for all users","General audiences often ignore or tune off paid ads","It relies on organic growth","It takes years to show up on Google"],a:1},
+      {q:"Some advertisers use paid ads to create misleading impressions about inferior products. This is a risk of:",o:["SEO","Paid Advertising","Traditional billboard marketing","Database management"],a:1},
+      {q:"Social Media Channels are used to:",o:["Communicate directly with customers and highlight value","Hide company information","Avoid customer feedback","Decrease website visitors"],a:0},
+      {q:"Directing social media followers to your website helps to:",o:["Decrease your server capacity","Increase website visitors and boost search engine ranking","Delete your SEO progress","Increase traditional print costs"],a:1},
+      {q:"E-Marketing helps in consumer education by:",o:["Hiding prices","Providing comprehensive info about competing products and prices","Limiting available data","Shutting down websites at night"],a:1},
+      {q:"Which of the following allows for immediate updates without incurring printing costs?",o:["Newspaper ads","Billboards","Interactive digital brochures","Television commercials"],a:2},
+      {q:"E-mail language is typically:",o:["Extremely formal and rigid","Simple and informal","Written in code","Unreadable"],a:1}
+    ]},
+    { name: "Lecture 4: E-Government", items: [
+      {q:"E-Government uses information and communications technologies to:",o:["Enhance the quality of information and services provided to citizens","Increase paper usage","Limit transparency","Restrict democracy"],a:0},
+      {q:"The first phase of E-Government development (Startup) involves:",o:["Full electronic transactions","Publishing static government information on the web (laws, rules)","Two-way interaction","Online voting only"],a:1},
+      {q:"In Phase 1 of E-Government, the relationship between government and users is:",o:["Active / Active","Passive / Active","Active / Passive","Passive / Passive"],a:2},
+      {q:"Downloading a government tax form from a website without the ability to submit it online represents which phase?",o:["Startup","One-Way Interaction","Two-Way Interaction","Full Integration"],a:1},
+      {q:"Phase 3 (Two-Way Interaction) is characterized by a relationship that is:",o:["Active / Passive","Passive / Passive","Active / Active","Offline"],a:2},
+      {q:"E-government services are divided into four main areas. Which is NOT one of them?",o:["G2C","G2B","G2E","C2C"],a:3},
+      {q:"Online payment of utility bills and tracking complaints falls under:",o:["G2B","G2C","G2G","G2E"],a:1},
+      {q:"G2G (Government to Government) services mainly focus on:",o:["Selling goods to citizens","Inter-departmental interaction, reporting, and budgeting","Issuing driving licenses to citizens","Corporate tax filing"],a:1},
+      {q:"E-Procurement, managing tenders, and submitting corporate tax returns are examples of:",o:["G2C","G2E","G2B","G2G"],a:2},
+      {q:"Services regarding payroll, transfers, leaves, and pensions for government staff are categorized as:",o:["G2C","G2B","G2E","G2G"],a:2},
+      {q:"A key benefit of e-government is:",o:["Decreasing transparency","More convenient hours (24/7) and reduced travel/waiting","Increasing paper bureaucracy","Limiting access to information"],a:1},
+      {q:"Which of the following is a major challenge of implementing e-government?",o:["Low setup costs","Over-simplicity","Huge population, multiple languages, and digital divide","Increased physical interaction"],a:2},
+      {q:"The \"Digital Divide\" or \"Inaccessibility\" challenge means:",o:["Everyone has equal access to the internet","Illiterate people and those in remote areas struggle to access e-services","Governments use too many computers","Citizens prefer paper forms"],a:1},
+      {q:"Privacy concerns in e-government arise because:",o:["Citizens want their data public","Massive data collection may threaten citizen privacy and increase surveillance","Paper files are easier to steal","E-government websites do not collect data"],a:1},
+      {q:"Implementing e-government requires:",o:["Merely computerizing existing flawed processes","Transforming and restructuring how the government operates","Only buying new printers","Stopping all physical services immediately"],a:1},
+      {q:"Issuing birth, marriage, and death certificates online is an objective of:",o:["G2E","G2B","G2C","B2B"],a:2},
+      {q:"E-government aims to make government processes:",o:["More transparent and accountable","More secretive and closed","Slower and costly","Completely anonymous"],a:0},
+      {q:"E-government projects typically face which financial barrier?",o:["They are entirely free","High initial costs for infrastructure and maintenance","They generate instant massive profits","Hardware is no longer needed"],a:1},
+      {q:"In a fully functioning e-government environment, there is ideally:",o:["No need for physical boundaries and less paper","Increased need for official ink signatures","More national holidays","Strict geographical limits"],a:0},
+      {q:"Gathering data for annual confidential reports (ACRs) of employees is a function of:",o:["G2B","G2C","G2E","C2C"],a:2}
+    ]},
+    { name: "Lecture 5: E-Payment & Security", items: [
+      {q:"What is an Electronic Payment System (EPS)?",o:["A physical cash exchange","A financial exchange online between buyers and sellers using digital instruments","A barter system","A traditional banking check"],a:1},
+      {q:"Which of the following is a form of digital financial instrument?",o:["Encrypted credit card numbers","Digital cash","Electronic cheques","All of the above"],a:3},
+      {q:"EPS is commonly used for:",o:["Online reservation and bill payment","Physical grocery shopping","Face-to-face bartering","Withdrawing physical cash"],a:0},
+      {q:"E-Cash works similarly to:",o:["A loan from the bank","Physical paper currency in the real world","A traditional credit card","A barter token"],a:1},
+      {q:"To use E-Cash, a customer must first:",o:["Create an e-bank account and load it with funds","Apply for a massive loan","Send a physical letter to the merchant","Meet the merchant in person"],a:0},
+      {q:"E-Cash tokens downloaded to a user's computer are digitally signed by:",o:["The merchant","The bank","The government","The internet service provider"],a:1},
+      {q:"A major reason some users prefer E-Cash over credit cards is:",o:["It charges extremely high interest","It provides anonymity and privacy","It leaves a permanent public record","It can only be used offline"],a:1},
+      {q:"A smart card differs from a traditional magnetic stripe card because it contains:",o:["No data at all","An embedded microchip that holds much more information","A thicker piece of plastic","A physical key"],a:1},
+      {q:"Smart cards can store approximately how many times more information than magnetic strip cards?",o:["2 times","10 times","100 times","1000 times"],a:2},
+      {q:"A credit card allows the user to:",o:["Use only the exact cash they have in their pocket","Borrow (lend) money from the bank to purchase goods and pay later","Pay with digital cash tokens anonymously","Generate their own currency"],a:1},
+      {q:"An advantage of credit cards for online transactions is:",o:["They provide fraud protection and worldwide acceptance","They have no processing fees for merchants","They guarantee absolute anonymity","They do not require an expiration date"],a:0},
+      {q:"A major disadvantage of E-payment systems is:",o:["Increased speed","Reduced transaction costs","The strict necessity of internet access","Time savings"],a:2},
+      {q:"Phishing is a cyber attack where attackers:",o:["Flood the server with traffic","Trick users into revealing sensitive information like passwords through fake emails","Physically steal a smart card","Destroy the database"],a:1},
+      {q:"Malicious software designed to damage or steal data (like Keyloggers or Trojans) is called:",o:["Phishing","Malware","SQL Injection","DDoS"],a:1},
+      {q:"An attack that manipulates backend databases using malicious code is known as:",o:["MITM (Man-in-the-Middle)","DDoS","SQL Injection","Credential Stuffing"],a:2},
+      {q:"What does a DDoS attack do?",o:["Steals passwords","Floods a server causing downtime and service interruption","Encrypts data for ransom","Improves network speed"],a:1},
+      {q:"What security measure blocks unauthorized access between an internal network and the internet?",o:["Firewall","Phishing","Trojan","Smart Card"],a:0},
+      {q:"Multi-Factor Authentication (MFA) requires:",o:["Only a password","Two or more authentication factors (e.g., password + OTP)","A physical signature","A public key only"],a:1},
+      {q:"Encryption is used to ensure which security objective?",o:["Availability","Integrity","Confidentiality","Speed"],a:2},
+      {q:"Know Your Customer (KYC) regulations are used by banks to:",o:["Market new products","Verify customer identities to reduce fraud and ensure security","Increase transaction fees","Avoid paying taxes"],a:1}
+    ]},
+    { name: "Lecture 6: M-Commerce & E-Voting", items: [
+      {q:"M-Commerce is defined as buying and selling goods and services using:",o:["Desktop PCs","Wireless devices like cell phones and PDAs","Physical retail stores","Landline telephones"],a:1},
+      {q:"M-Commerce is essentially the combination of:",o:["E-Commerce + Physical Stores","E-Commerce + Wireless Web","EDI + Fax Machines","TV Ads + Internet"],a:1},
+      {q:"The biggest advantage of M-Commerce is \"Ubiquity\", which means:",o:["High cost","The ability to conduct transactions anywhere and anytime","Restricted access","Reliance on paper"],a:1},
+      {q:"Mobile Ticketing allows a customer to receive their ticket via:",o:["Traditional mail","SMS or MMS","Fax","Physical courier"],a:1},
+      {q:"A benefit of Mobile Ticketing for event organizers is:",o:["Need for more staff","Longer wait lines","Reduced paper waste and shorter will-call lines","Higher printing costs"],a:2},
+      {q:"Paying for services via \"Premium Rate Telephone Numbers\" involves:",o:["Swiping a credit card on a phone","Charging a higher than normal price for a call, where part goes to the service provider","Sending physical cash in the mail","Using a free toll number"],a:1},
+      {q:"E-Voting uses electronic technologies to:",o:["Print more paper ballots","Cast, record, and count votes","Replace elections with manual surveys","Delay election results"],a:1},
+      {q:"Which of the following is a type of Polling-Place E-Voting?",o:["Internet Voting from home","Direct Recording Electronic (DRE) machines at a voting center","Voting via a mobile app","Sending an SMS to vote"],a:1},
+      {q:"Remote E-Voting includes:",o:["Internet Voting and Mobile Voting from outside the polling station","Paper ballots filled at the station","Optical scan voting at the center","Manual hand counting"],a:0},
+      {q:"What is a major advantage of E-Voting over traditional voting?",o:["Slower results","Automated counting and instant results","Longer queues","Manual errors"],a:1},
+      {q:"A critical disadvantage/risk of Remote E-Voting is:",o:["Extreme convenience","Severe security risks (hacking, cyberattacks) and authentication concerns","Faster voting process","High physical paper costs"],a:1},
+      {q:"In the pre-voting preparation phase of a secure e-voting system, keys are generated using an:",o:["ATM","HSM (Hardware Security Module)","SMS gateway","Unsecured laptop"],a:1},
+      {q:"In the e-voting workflow, the Public Key is used to:",o:["Decrypt the votes at the end","Encrypt the votes inside the voting application","Verify the voter's mobile number","Print the ballot"],a:1},
+      {q:"The Private Key in an e-voting system must be:",o:["Sent to all voters","Published on the internet","Kept absolutely secret inside the HSM to decrypt votes after voting ends","Written on the ballot"],a:2},
+      {q:"How does a voter authenticate their identity in a typical mobile voting workflow?",o:["By showing an ID to a camera","By entering their mobile number and receiving an OTP","By mailing a physical signature","By scanning a paper ballot"],a:1},
+      {q:"What happens during the \"Sort and Validate\" step after e-voting ends?",o:["Votes are published immediately","The system removes duplicate votes and votes from ineligible voters","The system generates new keys","The server shuts down forever"],a:1},
+      {q:"A lack of a \"Physical Audit Trail\" in some e-voting systems is a problem because:",o:["It saves trees","It prevents a 100% verifiable manual recount in case of disputes","It speeds up the process","It makes the machines lighter"],a:1},
+      {q:"Which country is considered a global pioneer, having launched the world's first national internet voting system in 2005?",o:["USA","Estonia","Japan","Germany"],a:1},
+      {q:"Why does Estonia continue using I-Voting despite some researchers' concerns?",o:["It is forced upon them by law","Deep societal trust in 'e-Estonia' and continuous system updates","They have no physical polling stations left","It is completely immune to all known hacks"],a:1},
+      {q:"What technology might improve the transparency and immutability of future E-Voting systems?",o:["Fax machines","Blockchain technology","Analog landlines","Unencrypted databases"],a:1}
+    ]}
+  ];
+  const allNew = [];
+  for (const lec of lectures) {
+    for (const item of lec.items) {
+      allNew.push({ q: item.q, o: item.o.slice(), a: item.a, s: lec.name });
+    }
+  }
+  return allNew;
+}
+
+const LECTURE_QUESTIONS = parseLectureQuestions();
+
+// MERGE WITH DEDUPLICATION (using question text as key)
+const fullQuestionMap = new Map();
+[...ORIGINAL_RAW, ...LECTURE_QUESTIONS].forEach(q => {
+  const key = q.q.trim().toLowerCase();
+  if (!fullQuestionMap.has(key)) fullQuestionMap.set(key, q);
+});
+const ALL_QUESTIONS = Array.from(fullQuestionMap.values());
+
+function shuffle(arr){let a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+let questions=[],current=0,userAnswers=[],filterSource="All";
+
+function init(){
+  questions=shuffle(ALL_QUESTIONS);
+  current=0;
+  userAnswers=new Array(questions.length).fill(null);
+  filterSource="All";
+  render();
+}
+
+function getFiltered(){
+  return filterSource==="All"?questions:questions.filter(q=>q.s===filterSource);
+}
+
+function sourceBadge(s){
+  const c=SOURCE_COLORS[s]||{bg:"#F1EFE8",color:"#444441",border:"#B4B2A9"};
+  return `<span class="source-badge" style="background:${c.bg};color:${c.color};border-color:${c.border}">📄 ${s}.pdf</span>`;
+}
+
+function render(){
+  document.getElementById("root").innerHTML=buildQuiz();
+}
+
+function buildQuiz(){
+  const filtered=getFiltered();
+  if(!filtered.length)return`<p style="color:#6B6B66;padding:2rem 0">No questions for this filter.</p>`;
+  const idx=Math.min(current,filtered.length-1);
+  const q=filtered[idx];
+  const gi=questions.indexOf(q);
+  const ua=userAnswers[gi];
+  const answeredCount=userAnswers.filter(x=>x!==null).length;
+  const correctCount=userAnswers.reduce((a,u,i)=>u===null?a:a+(u===questions[i].a?1:0),0);
+  const pct=Math.round((idx+1)/filtered.length*100);
+
+  const sources=["All",...new Set(questions.map(q=>q.s))];
+  const chips=sources.map(k=>{
+    const cnt=k==="All"?questions.length:questions.filter(x=>x.s===k).length;
+    return `<button class="chip${filterSource===k?" active":""}" onclick="setFilter('${k.replace(/'/g, "\\'")}')">${k==="All"?"All":k} (${cnt})</button>`;
+  }).join("");
+
+  const opts=q.o.map((o,i)=>{
+    let cls="opt";
+    if(ua!==null){
+      if(i===q.a)cls+=" correct";
+      else if(i===ua&&ua!==q.a)cls+=" wrong";
+    }
+    return `<button class="${cls}"${ua!==null?" disabled":""} onclick="answer(${gi},${i})"><span class="opt-letter">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`;
+  }).join("");
+
+  let fb="";
+  if(ua!==null){
+    fb=ua===q.a
+      ?`<div class="feedback ok show">✓ Correct!</div>`
+      :`<div class="feedback err show">✗ Incorrect. Correct answer: <strong>${String.fromCharCode(65+q.a)}. ${q.o[q.a]}</strong></div>`;
+  }
+
+  const isLast=idx===filtered.length-1;
+  const nextBtn=isLast&&answeredCount>0
+    ?`<button class="btn btn-primary" onclick="showResults()">See Results →</button>`
+    :`<button class="btn" onclick="next()" ${ua===null?"disabled":""}>Next →</button>`;
+
+  return`
+<div class="stats-row">
+  <div class="stat"><div class="val">${filtered.length}</div><div class="lbl">Total</div></div>
+  <div class="stat"><div class="val" style="color:#185FA5">${answeredCount}</div><div class="lbl">Answered</div></div>
+  <div class="stat"><div class="val" style="color:#3B6D11">${correctCount}</div><div class="lbl">Correct</div></div>
+  <div class="stat"><div class="val" style="color:#A32D2D">${answeredCount-correctCount}</div><div class="lbl">Wrong</div></div>
+</div>
+<div class="filter-wrap">
+  <div class="filter-label">Filter by source file</div>
+  <div class="filter-chips">${chips}</div>
+</div>
+<div class="progress-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
+<div class="q-card">
+  ${sourceBadge(q.s)}
+  <div class="q-num">Question ${idx+1} of ${filtered.length}</div>
+  <div class="q-text">${q.q}</div>
+  <div class="options">${opts}</div>
+  ${fb}
+  <div class="nav-row" style="margin-top:1.25rem">
+    <span class="nav-info">${idx+1} / ${filtered.length}</span>
+    <div class="btn-row">
+      <button class="btn" onclick="prev()" ${idx===0?"disabled":""}>← Prev</button>
+      ${nextBtn}
+    </div>
+  </div>
+</div>`;
+}
+
+function answer(gi,i){
+  if(userAnswers[gi]!==null)return;
+  userAnswers[gi]=i;
+  render();
+}
+function next(){const f=getFiltered();if(current<f.length-1){current++;render();}}
+function prev(){if(current>0){current--;render();}}
+function setFilter(s){filterSource=s;current=0;render();}
+
+function showResults(){
+  const total=questions.length;
+  const answeredCount=userAnswers.filter(x=>x!==null).length;
+  const correctCount=userAnswers.reduce((a,u,i)=>u===null?a:a+(u===questions[i].a?1:0),0);
+  const pct=answeredCount>0?Math.round(correctCount/answeredCount*100):0;
+
+  let grade,gColor,gBg;
+  if(pct>=90){grade="Excellent";gColor="#27500A";gBg="#EAF3DE";}
+  else if(pct>=75){grade="Good";gColor="#0C447C";gBg="#E6F1FB";}
+  else if(pct>=60){grade="Pass";gColor="#633806";gBg="#FAEEDA";}
+  else{grade="Needs Review";gColor="#501313";gBg="#FCEBEB";}
+
+  const sourcesSet=[...new Set(questions.map(q=>q.s))];
+  const bySource=sourcesSet.map(s=>{
+    const sq=questions.filter(q=>q.s===s);
+    const sc=sq.filter(q=>userAnswers[questions.indexOf(q)]===q.a).length;
+    const sa=sq.filter(q=>userAnswers[questions.indexOf(q)]!==null).length;
+    const c=SOURCE_COLORS[s]||{bg:"#F1EFE8",color:"#444441",border:"#B4B2A9"};
+    return`<div class="src-row"><span class="source-badge" style="background:${c.bg};color:${c.color};border-color:${c.border};margin-bottom:0">📄 ${s}</span><span class="src-score">${sc}/${sa>0?sa:sq.length}</span></div>`;
+  }).join("");
+
+  const wrongItems=questions.map((q,i)=>{
+    const ua=userAnswers[i];
+    if(ua===null||ua===q.a)return"";
+    return`<div class="review-card">
+      ${sourceBadge(q.s)}
+      <div class="review-q">${q.q}</div>
+      <div class="review-ans">
+        <div class="ra wrong">✗ Your answer: ${String.fromCharCode(65+ua)}. ${q.o[ua]}</div>
+        <div class="ra correct">✓ Correct: ${String.fromCharCode(65+q.a)}. ${q.o[q.a]}</div>
+      </div>
+    </div>`;
+  }).join("");
+
+  const wrongCount=questions.filter((q,i)=>userAnswers[i]!==null&&userAnswers[i]!==q.a).length;
+
+  document.getElementById("root").innerHTML=`
+<div class="results-hero">
+  <h2>Quiz Complete</h2>
+  <div class="score-num">${correctCount} <span style="font-size:28px;color:#6B6B66">/ ${answeredCount}</span></div>
+  <div class="score-pct">${pct}% correct · ${total-answeredCount} skipped</div>
+  <span class="grade-pill" style="background:${gBg};color:${gColor}">${grade}</span>
+</div>
+<div class="source-summary">${bySource}</div>
+<div class="review-section">
+  <h3>Wrong answers to review (${wrongCount})</h3>
+  ${wrongItems||`<div class="no-wrong">🎉 No wrong answers — perfect score on answered questions!</div>`}
+</div>
+<button class="restart-btn" onclick="init()">↺ Restart Quiz</button>`;
+}
+
+window.answer=answer;window.next=next;window.prev=prev;
+window.setFilter=setFilter;window.showResults=showResults;window.init=init;
+
+init();
+</script>
+</body>
+</html>
